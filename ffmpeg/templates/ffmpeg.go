@@ -20,21 +20,7 @@ const FFmpegTranscodeTemplate = `
 			{{- if $streamOne.Video.Preset}}
 		 		-preset {{$streamOne.Video.Preset}}
 			{{- end }}
-			{{- if $streamOne.Video.Width}}
-				{{- if $streamOne.Video.Height}}
-					-vf scale={{$streamOne.Video.Width}}:{{$streamOne.Video.Height}}
-				{{- else }}
-					-vf scale={{$streamOne.Video.Width}}:-4
-				{{- end }}
-			{{- else }}
-				{{- if $streamOne.Video.Height}}
-					-vf scale=-4:{{$streamOne.Video.Height}}
-				{{- end }}
-			{{- end }}
 			{{vfilters $streamOne.Video}}
-			{{- if $streamOne.Video.Delogo}}
-		 		-filter_complex delogo=x={{$streamOne.Video.Delogo.X}}:y={{$streamOne.Video.Delogo.Y}}:w={{$streamOne.Video.Delogo.W}}:h={{$streamOne.Video.Delogo.H}}
-			{{- end }}
 			{{- if $streamOne.Video.Fps}}
 		 		-r {{$streamOne.Video.Fps}}
 			{{- end }}

@@ -60,12 +60,37 @@ func formatVideoFilters(input interface{}) string {
 	var videoFilerList = []string{}
 
 	if videoParams.Delogo != nil {
-		videoFilerList = append(videoFilerList, "delogo")
+		// check
+		if videoParams.Delogo.X >= 0 && videoParams.Delogo.Y >= 0 && videoParams.Delogo.W >= 0 && videoParams.Delogo.H >= 0 {
+			videoFilerList = append(videoFilerList, fmt.Sprintf("delogo=x=%d:y=%d:w=%d:h=%d",
+				videoParams.Delogo.X, videoParams.Delogo.Y, videoParams.Delogo.W, videoParams.Delogo.H))
+		}
 	}
 
 	if videoParams.Width > 0 || videoParams.Height > 0 {
-		videoFilerList = append(videoFilerList, "scale")
+		if videoParams.Width > 0 {
+			if videoParams.Height > 0 {
+				videoFilerList = append(videoFilerList, fmt.Sprintf("scale=%d:%d", videoParams.Width, videoParams.Height))
+			} else {
+				videoFilerList = append(videoFilerList, fmt.Sprintf("scale=%d:-4", videoParams.Width))
+			}
+		} else {
+			videoFilerList = append(videoFilerList, fmt.Sprintf("scale=-4:%d", videoParams.Height))
+		}
 	}
 
-	return ""
+	fmt.Println("videoFilerList:", videoFilerList)
+	var output = ""
+	if len(videoFilerList) > 0 {
+		output = "-vf '"
+		for filterIndex, filterOne := range videoFilerList {
+			if filterIndex > 0 {
+				output = output + ","
+			}
+			output = output + filterOne
+		}
+		output = output + "'"
+	}
+
+	return output
 }

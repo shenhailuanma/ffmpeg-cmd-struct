@@ -2,7 +2,6 @@ package templates
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 	"text/template"
 )
@@ -32,7 +31,7 @@ func GenerateCommand(name string, templateText string, data interface{}) (string
 		// trim space and connect all strings
 		cmdNewOne := strings.TrimSpace(cmdStringOne)
 		if len(cmdNewOne) > 0 {
-			fmt.Printf("cmdNewOne:%s\n", cmdNewOne)
+			//fmt.Printf("cmdNewOne:%s\n", cmdNewOne)
 			cmdStringOutput = cmdStringOutput + " " + cmdNewOne
 		}
 	}

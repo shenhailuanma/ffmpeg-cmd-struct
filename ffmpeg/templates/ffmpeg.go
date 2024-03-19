@@ -31,6 +31,10 @@ const FFmpegTranscodeTemplate = `
 					-vf scale=-4:{{$streamOne.Video.Height}}
 				{{- end }}
 			{{- end }}
+			{{vfilters $streamOne.Video}}
+			{{- if $streamOne.Video.Delogo}}
+		 		-filter_complex delogo=x={{$streamOne.Video.Delogo.X}}:y={{$streamOne.Video.Delogo.Y}}:w={{$streamOne.Video.Delogo.W}}:h={{$streamOne.Video.Delogo.H}}
+			{{- end }}
 			{{- if $streamOne.Video.Fps}}
 		 		-r {{$streamOne.Video.Fps}}
 			{{- end }}

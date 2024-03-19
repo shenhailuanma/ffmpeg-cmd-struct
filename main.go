@@ -19,7 +19,7 @@ func testInputClip() error {
 		Inputs: []ffmpeg.FFmpegInput{
 			{
 				Kind:      "file",
-				Local:     "input.m4v",
+				Local:     "time60s.mp4",
 				ClipStart: stringP("00:00:05"),
 				ClipEnd:   stringP("00:00:15"),
 			},
@@ -37,6 +37,13 @@ func testInputClip() error {
 						Video: &ffmpeg.FFmpegVideoStreamParams{
 							Codec:  "h264",
 							Preset: "slow",
+							Width:  1000,
+							Delogo: &ffmpeg.FFmpegVideoStreamParamDelogo{
+								X: 100,
+								Y: 200,
+								W: 400,
+								H: 400,
+							},
 						},
 					},
 					{

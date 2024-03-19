@@ -13,15 +13,24 @@ const (
 )
 
 type FFmpegVideoStreamParams struct {
-	Map     string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
-	Codec   string `json:"codec"`
-	Preset  string `json:"preset"`
-	Width   int    `json:"width"`
-	Height  int    `json:"height"`
-	Bitrate string `json:"bitrate"`
-	Fps     int    `json:"fps"`
-	CRF     int    `json:"crf"`
+	Map     string                        `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
+	Codec   string                        `json:"codec"`
+	Preset  string                        `json:"preset"`
+	Width   int                           `json:"width"`
+	Height  int                           `json:"height"`
+	Bitrate string                        `json:"bitrate"`
+	Fps     int                           `json:"fps"`
+	CRF     int                           `json:"crf"`
+	Delogo  *FFmpegVideoStreamParamDelogo `json:"delogo"`
 }
+
+type FFmpegVideoStreamParamDelogo struct {
+	X int `json:"x"` // Specify the top left corner coordinates of the logo. They must be specified.
+	Y int `json:"y"` // Specify the top left corner coordinates of the logo. They must be specified.
+	W int `json:"w"` // Specify the width and height of the logo to clear. They must be specified.
+	H int `json:"h"` // Specify the width and height of the logo to clear. They must be specified.
+}
+
 type FFmpegAudioStreamParams struct {
 	Map        string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
 	Codec      string `json:"codec"`

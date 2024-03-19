@@ -6,7 +6,7 @@ import (
 )
 
 func FFmpegCommandGenerate(request FFmpegCommandLineStruct) (string, error) {
-	return templates.GenerateCommand("transcode", templates.FFmpegTranscodeTemplate, request)
+	return GenerateCommand("transcode", templates.FFmpegTranscodeTemplate, request)
 }
 
 func CheckFFmpegTranscodeRequest(request FFmpegCommandLineStruct) error {
@@ -21,14 +21,14 @@ func CheckFFmpegTranscodeRequest(request FFmpegCommandLineStruct) error {
 	return nil
 }
 
-func SetFFmpegTranscodeRequest(request FFmpegCommandLineStruct) (FFmpegCommandLineStruct, error) {
+func CheckAndFixFFmpegTranscodeRequest(request FFmpegCommandLineStruct) (FFmpegCommandLineStruct, error) {
 
 	if len(request.Inputs) == 0 {
-		return errors.New("no input stream")
+		return request, errors.New("no input stream")
 	}
 	if len(request.Outputs) == 0 {
-		return errors.New("no output stream")
+		return request, errors.New("no output stream")
 	}
 
-	return nil
+	return request, nil
 }

@@ -20,3 +20,15 @@ func CheckFFmpegTranscodeRequest(request FFmpegCommandLineStruct) error {
 
 	return nil
 }
+
+func SetFFmpegTranscodeRequest(request FFmpegCommandLineStruct) (FFmpegCommandLineStruct, error) {
+
+	if len(request.Inputs) == 0 {
+		return errors.New("no input stream")
+	}
+	if len(request.Outputs) == 0 {
+		return errors.New("no output stream")
+	}
+
+	return nil
+}

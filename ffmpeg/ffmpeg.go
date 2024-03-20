@@ -22,6 +22,15 @@ type FFmpegVideoStreamParams struct {
 	Fps     int                           `json:"fps"`
 	CRF     int                           `json:"crf"`
 	Delogo  *FFmpegVideoStreamParamDelogo `json:"delogo"`
+	Logo    *FFmpegVideoStreamParamLogo   `json:"logo"`
+}
+
+type FFmpegVideoStreamParamLogo struct {
+	Source FFmpegInput `json:"source"` // logo file
+	X      int         `json:"x"`      // Specify the top left corner coordinates of the logo. x
+	Y      int         `json:"y"`      // Specify the top left corner coordinates of the logo. y
+	W      *int        `json:"w"`      // display logo width
+	H      *int        `json:"h"`      // display logo height
 }
 
 type FFmpegVideoStreamParamDelogo struct {

@@ -59,6 +59,38 @@ func formatVideoFilters(input interface{}) string {
 
 	var videoFilerList = []string{}
 
+	if videoParams.Logo != nil {
+		// check
+		if videoParams.Logo.Source.Local != "" {
+			logoCmd := fmt.Sprintf("movie=%s", videoParams.Logo.Source.Local)
+
+			var w = 0 // logo scale size
+			var h = 0 // logo scale size
+			if videoParams.Logo.W != nil {
+				w = *videoParams.Logo.W
+			}
+			if videoParams.Logo.H != nil {
+				h = *videoParams.Logo.H
+			}
+
+			if w > 0 || h > 0 {
+				if w > 0 {
+					if h > 0 {
+						logoCmd = fmt.Sprintf("%s,scale=%d:%d", logoCmd, w, h)
+					} else {
+						logoCmd = fmt.Sprintf("%s,scale=%d:-4", logoCmd, w)
+					}
+				} else {
+					logoCmd = fmt.Sprintf("%s,scale=-4:%d", logoCmd, h)
+				}
+			}
+
+			logoCmd = fmt.Sprintf("%s [logo];[in][logo]overlay=%d:%d", logoCmd, videoParams.Logo.X, videoParams.Logo.Y)
+
+			videoFilerList = append(videoFilerList, logoCmd)
+		}
+	}
+
 	if videoParams.Delogo != nil {
 		// check
 		if videoParams.Delogo.X >= 0 && videoParams.Delogo.Y >= 0 && videoParams.Delogo.W >= 0 && videoParams.Delogo.H >= 0 {

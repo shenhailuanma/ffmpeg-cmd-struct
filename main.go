@@ -14,6 +14,10 @@ func stringP(v string) *string {
 	return &v
 }
 
+func intP(v int) *int {
+	return &v
+}
+
 func testInputClip() error {
 	var request = ffmpeg.FFmpegCommandLineStruct{
 		Inputs: []ffmpeg.FFmpegInput{
@@ -39,10 +43,20 @@ func testInputClip() error {
 							Preset: "slow",
 							Width:  1000,
 							Delogo: &ffmpeg.FFmpegVideoStreamParamDelogo{
-								X: 100,
+								X: 200,
 								Y: 200,
 								W: 400,
 								H: 400,
+							},
+							Logo: &ffmpeg.FFmpegVideoStreamParamLogo{
+								Source: ffmpeg.FFmpegInput{
+									Kind:  "file",
+									Local: "logo.png",
+								},
+								X: 1000,
+								Y: 100,
+								W: intP(100),
+								H: intP(100),
 							},
 						},
 					},

@@ -1,5 +1,15 @@
 package ffmpeg
 
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"time"
+)
+
 type FFprobeInfo struct {
 	Format  FFprobeFormatInfo   `json:"format"`
 	Streams []FFprobeStreamInfo `json:"streams"`
@@ -33,4 +43,50 @@ type FFprobeStreamInfo struct {
 type FFprobeErrorInfo struct {
 	Code   int    `json:"code"`
 	String string `json:"string"`
+}
+
+func (p *FFprobeInfo) JsonString() string {
+	data, err := json.Marshal(p)
+	if err == nil {
+		return string(data)
+	}
+
+	return ""
+}
+
+func ProbeWithTimeout(filePath string, timeout int64) (FFprobeInfo, error) {
+	var output = FFprobeInfo{}
+
+	// ffprobe -v quiet  -print_format json -show_format -show_streams
+
+	args := []string{"-v", "quiet", "-print_format", "json", "-show_format", "-show_streams"}
+	args = append(args, filePath)
+
+	ctx := context.Background()
+	if timeout > 0 {
+		var cancel func()
+		ctx, cancel = context.WithTimeout(context.Background(), time.Second*time.Duration(timeout))
+		defer cancel()
+	}
+
+	fmt.Println("ProbeWithTimeout, cmd:", args)
+	cmd := exec.CommandContext(ctx, "ffprobe", args...)
+	cmd.Env = os.Environ()
+	buf := bytes.NewBuffer(nil)
+	stdErrBuf := bytes.NewBuffer(nil)
+	cmd.Stdout = buf
+	cmd.Stderr = stdErrBuf
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("ProbeWithTimeout, err msg:", string(stdErrBuf.Bytes()), ", error:", err.Error())
+		return output, err
+	}
+
+	var outData = buf.Bytes()
+	fmt.Println("ProbeWithTimeout, cmd:", string(outData))
+
+	err = json.Unmarshal(outData, &output)
+
+	return output, err
 }

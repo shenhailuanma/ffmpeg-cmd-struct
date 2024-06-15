@@ -12,6 +12,12 @@ const FFmpegTranscodeTemplate = `
 {{- end }}
 
 {{- range $outputIndex, $outputOne := .Outputs}}
+	{{- if $outputOne.Output.ClipStart }}
+		-ss {{$outputOne.Output.ClipStart}}
+	{{- end }}
+	{{- if $outputOne.Output.ClipEnd }}
+		-to {{$outputOne.Output.ClipEnd}}
+	{{- end }}
 	{{- range $streamIndex, $streamOne := $outputOne.Streams}}
 		{{- if eq "video" $streamOne.Kind}}
 			{{- if $streamOne.Video.Codec}}

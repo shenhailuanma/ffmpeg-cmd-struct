@@ -85,7 +85,44 @@ func formatVideoFilters(input interface{}) string {
 				}
 			}
 
-			logoCmd = fmt.Sprintf("%s [logo];[in][logo]overlay=%d:%d", logoCmd, videoParams.Logo.X, videoParams.Logo.Y)
+			logoX := fmt.Sprintf("%d", videoParams.Logo.X)
+			logoY := fmt.Sprintf("%d", videoParams.Logo.Y)
+
+			if videoParams.Logo.Preset != nil {
+				switch *videoParams.Logo.Preset {
+				case FFmpegVideoLogoPresetLeftTop:
+					logoX = "floor(0.05*main_w)"
+					logoY = "floor(0.05*main_h)"
+				case FFmpegVideoLogoPresetRightTop:
+					logoX = "floor(main_w-overlay_w-0.05*main_w)"
+					logoY = "floor(0.05*main_h)"
+				case FFmpegVideoLogoPresetLeftBottom:
+					logoX = "floor(0.05*main_w)"
+					logoY = "floor(main_h-overlay_h-0.05*main_h)"
+				case FFmpegVideoLogoPresetRightBottom:
+					logoX = "floor(main_w-overlay_w-0.05*main_w)"
+					logoY = "floor(main_h-overlay_h-0.05*main_h)"
+				case FFmpegVideoLogoPresetLeftUpDown:
+					logoX = "floor(0.05*main_w)"
+					logoY = "(main_h-overlay_h)*abs(sin(t/100))"
+				case FFmpegVideoLogoPresetRightUpDown:
+					logoX = "floor(main_w-overlay_w-0.05*main_w)"
+					logoY = "(main_h-overlay_h)*abs(sin(t*0.01))"
+				case FFmpegVideoLogoPresetTopLeftRight:
+					logoX = "(main_w-overlay_w)*abs(sin(t*0.01))"
+					logoY = "floor(0.05*main_h)"
+				case FFmpegVideoLogoPresetLeftTopRightBottom:
+					logoX = "(main_w-overlay_w)*abs(sin(2*PI*t/100))"
+					logoY = "(main_h-overlay_h)*abs(sin(2*PI*t/100))"
+				case FFmpegVideoLogoPresetCircle:
+					logoX = "(main_w-overlay_w)/2+(main_w-overlay_w)/2*sin(2*PI*t/100)"
+					logoY = "(main_h-overlay_h)/2-(main_h-overlay_h)/2*cos(2*PI*t/100)"
+				}
+			}
+
+			if logoX != "" && logoY != "" {
+				logoCmd = fmt.Sprintf("%s [logo];[in][logo]overlay=%s:%s", logoCmd, logoX, logoY)
+			}
 
 			videoFilerList = append(videoFilerList, logoCmd)
 		}

@@ -38,17 +38,21 @@ const FFmpegTranscodeTemplate = `
 			{{- end }}
 		{{- end }}
 		{{- if eq "audio" $streamOne.Kind}}
-			{{- if $streamOne.Audio.Codec}}
+			{{- if $streamOne.Audio.Disabled}}
+				-an
+			{{- else }}
+				{{- if $streamOne.Audio.Codec}}
 		 		-c:a {{$streamOne.Audio.Codec}}
-			{{- end }}
-			{{- if $streamOne.Audio.Channels}}
-		 		-ac {{$streamOne.Audio.Channels}}
-			{{- end }}
-			{{- if $streamOne.Audio.SampleRate}}
-		 		-ar {{$streamOne.Audio.SampleRate}}
-			{{- end }}
-			{{- if $streamOne.Audio.Bitrate}}
-		 		-b:a {{$streamOne.Audio.Bitrate}}
+				{{- end }}
+				{{- if $streamOne.Audio.Channels}}
+					-ac {{$streamOne.Audio.Channels}}
+				{{- end }}
+				{{- if $streamOne.Audio.SampleRate}}
+					-ar {{$streamOne.Audio.SampleRate}}
+				{{- end }}
+				{{- if $streamOne.Audio.Bitrate}}
+					-b:a {{$streamOne.Audio.Bitrate}}
+				{{- end }}
 			{{- end }}
 		{{- end }}
     {{- end }}

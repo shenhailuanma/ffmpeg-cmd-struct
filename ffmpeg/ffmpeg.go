@@ -25,12 +25,25 @@ type FFmpegVideoStreamParams struct {
 	Logo    *FFmpegVideoStreamParamLogo   `json:"logo"`
 }
 
+const (
+	FFmpegVideoLogoPresetLeftTop            = "left-top"
+	FFmpegVideoLogoPresetRightTop           = "right-top"
+	FFmpegVideoLogoPresetLeftBottom         = "left-bottom"
+	FFmpegVideoLogoPresetRightBottom        = "right-bottom"
+	FFmpegVideoLogoPresetLeftUpDown         = "left-up-down"
+	FFmpegVideoLogoPresetRightUpDown        = "right-up-down"
+	FFmpegVideoLogoPresetTopLeftRight       = "top-left-right"
+	FFmpegVideoLogoPresetLeftTopRightBottom = "left-top-right-bottom" // from left-top to right-bottom
+	FFmpegVideoLogoPresetCircle             = "circle"
+)
+
 type FFmpegVideoStreamParamLogo struct {
 	Source FFmpegInput `json:"source"` // logo file
 	X      int         `json:"x"`      // Specify the top left corner coordinates of the logo. x
 	Y      int         `json:"y"`      // Specify the top left corner coordinates of the logo. y
 	W      *int        `json:"w"`      // display logo width
 	H      *int        `json:"h"`      // display logo height
+	Preset *string     `json:"preset"` // [priority higher than X and Y] Specify preset of the logo position, value support: FFmpegVideoLogoPreset*
 }
 
 type FFmpegVideoStreamParamDelogo struct {
@@ -42,6 +55,7 @@ type FFmpegVideoStreamParamDelogo struct {
 
 type FFmpegAudioStreamParams struct {
 	Map        string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
+	Disabled   bool   `json:"disabled"`
 	Codec      string `json:"codec"`
 	Channels   int    `json:"channles"`
 	SampleRate int    `json:"sample_rate"`

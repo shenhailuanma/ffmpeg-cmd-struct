@@ -6,10 +6,11 @@ import (
 )
 
 func main() {
-	testInputClip()
-	testOutputClip()
-	testTransGif()
-	testFFprobe()
+	//testInputClip()
+	//testOutputClip()
+	//testTransGif()
+	testTransLogo()
+	//testFFprobe()
 }
 
 func stringP(v string) *string {
@@ -211,6 +212,68 @@ func testTransGif() error {
 	}
 
 	fmt.Printf("testTransGif, cmd:%s\n", cmd)
+
+	return nil
+}
+
+func testTransLogo() error {
+	var request = ffmpeg.FFmpegCommandLineStruct{
+		Inputs: []ffmpeg.FFmpegInput{
+			{
+				Kind:  "file",
+				Local: "input.mp4",
+			},
+		},
+		Outputs: []ffmpeg.FFmpegOutputParams{
+			{
+				Output: ffmpeg.FFmpegOutput{
+					Kind:  "file",
+					Local: "output.mp4",
+				},
+				Format: "mp4",
+				Streams: []ffmpeg.FFmpegStreamParams{
+					{
+						Kind: "audio",
+						Audio: &ffmpeg.FFmpegAudioStreamParams{
+							Disabled: true,
+							Codec:    "aac",
+						},
+					},
+					{
+						Kind: "video",
+						Video: &ffmpeg.FFmpegVideoStreamParams{
+							Width: 1000,
+							Fps:   30,
+							Delogo: &ffmpeg.FFmpegVideoStreamParamDelogo{
+								X: 20,
+								Y: 20,
+								W: 40,
+								H: 40,
+							},
+							Logo: &ffmpeg.FFmpegVideoStreamParamLogo{
+								Source: ffmpeg.FFmpegInput{
+									Kind:  "file",
+									Local: "logo.png",
+								},
+								W:      intP(100),
+								H:      intP(40),
+								Preset: stringP(ffmpeg.FFmpegVideoLogoPresetCircle),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	// generate ffmpeg cmd
+	cmd, err := ffmpeg.FFmpegCommandGenerate(request)
+	if err != nil {
+		fmt.Println("testTransGif, FFmpegCommandGenerate error:", err.Error())
+		return nil
+	}
+
+	fmt.Printf("testTransGif, cmd: ffmpeg %s\n", cmd)
 
 	return nil
 }

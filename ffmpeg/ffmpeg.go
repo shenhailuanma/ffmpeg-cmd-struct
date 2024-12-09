@@ -89,11 +89,12 @@ type FFmpegOutput struct {
 }
 
 type FFmpegInput struct {
-	Kind      string  `json:"kind"`       // kind: file(local file), http(http/https url), oss, ftp , defined in: FFmpegInputOutputType*
-	URL       string  `json:"url"`        // remote resource URL, when FFmpegInputOutputTypeHTTP used.
-	Local     string  `json:"local"`      // local file path,  when FFmpegInputOutputTypeFILE used. eg: /tmp/folder/video.mp4
-	ClipStart *string `json:"clip_start"` // seek the start of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
-	ClipEnd   *string `json:"clip_end"`   // seek the end of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
+	Kind       string  `json:"kind"`        // kind: file(local file), http(http/https url), oss, ftp , defined in: FFmpegInputOutputType*
+	URL        string  `json:"url"`         // remote resource URL, when FFmpegInputOutputTypeHTTP used.
+	Local      string  `json:"local"`       // local file path,  when FFmpegInputOutputTypeFILE used. eg: /tmp/folder/video.mp4
+	SourceName string  `json:"source_name"` // source filename
+	ClipStart  *string `json:"clip_start"`  // seek the start of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
+	ClipEnd    *string `json:"clip_end"`    // seek the end of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
 }
 
 type FFmpegCommandLineStruct struct {

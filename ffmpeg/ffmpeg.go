@@ -95,6 +95,12 @@ type FFmpegInput struct {
 	SourceName string  `json:"source_name"` // source filename
 	ClipStart  *string `json:"clip_start"`  // seek the start of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
 	ClipEnd    *string `json:"clip_end"`    // seek the end of this input file to position. position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
+	Tags       *[]Tag  `json:"tags"`        // input source tags
+}
+
+type Tag struct {
+	Key   string `json:"k"`
+	Value string `json:"v"`
 }
 
 type FFmpegCommandLineStruct struct {
